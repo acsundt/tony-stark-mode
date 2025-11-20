@@ -2,9 +2,16 @@ import cv2
 import mediapipe as mp
 import numpy as np
 import torch
-from model_train import GestureModel  # Your MLP class definition
+from model_train import GestureModel
+
+from eye_tracking import EyeTracker
+
 from gesture_actions import GESTURE_ACTIONS
 import time
+
+import mediapipe as mp
+print(mp.__version__)
+
 
 GESTURES = ["fist", "open_hand", "pinch", "peace", "thumbs_up"]
 
@@ -21,6 +28,14 @@ last_triggered_gesture = None
 # MediaPipe
 mp_hands = mp.solutions.hands
 mp_drawing = mp.solutions.drawing_utils
+
+
+# Initialize eyetracker
+eye_tracker = EyeTracker()
+
+
+
+
 
 # Load PyTorch model
 model = GestureModel().to(DEVICE)
@@ -41,6 +56,10 @@ cap = cv2.VideoCapture(700)  # adjust camera index
 with mp_hands.Hands(max_num_hands=1) as hands:
     while True:
         ret, frame = cap.read()
+
+        #Update cursor every frame based on eye tracker
+        cursor_x, cursor_y = eye_tracker.update(frame)
+
         if not ret:
             break
 
@@ -86,5 +105,7 @@ with mp_hands.Hands(max_num_hands=1) as hands:
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
 
+
+eye_tracker.release()
 cap.release()
 cv2.destroyAllWindows()
