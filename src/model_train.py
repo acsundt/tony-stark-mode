@@ -8,7 +8,7 @@ from sklearn.model_selection import train_test_split
 
 # Configuration
 
-GESTURES = ["fist", "open_hand", "pinch", "peace"]
+GESTURES = ["fist", "open_hand", "pinch", "peace", "thumbs_up"]
 DATA_DIR = "data"
 BATCH_SIZE = 32
 EPOCHS = 40
@@ -65,11 +65,11 @@ class GestureModel(nn.Module):
     def __init__(self):
         super().__init__()
         self.net = nn.Sequential(
-            nn.Linear(63, 128),
+            nn.Linear(63, 256),
             nn.ReLU(),
-            nn.Linear(128, 64),
+            nn.Linear(256, 128),
             nn.ReLU(),
-            nn.Linear(64, len(GESTURES))
+            nn.Linear(128, len(GESTURES))
         )
 
     def forward(self, x):

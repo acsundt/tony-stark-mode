@@ -8,7 +8,8 @@ GESTURES = {
     0: "pinch",
     1: "fist",
     2: "open_hand",
-    3: "peace"
+    3: "peace",
+    4: "thumbs_up"
 }
 
 # Create folder
